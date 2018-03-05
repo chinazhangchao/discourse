@@ -1,0 +1,10 @@
+{{#d-modal
+  modalClass=modalClass
+  title=title
+  class="hidden"
+  errors=errors
+  closeModal=(route-action "closeModal")}}
+
+  {{outlet "modalBody"}}
+
+{{/d-modal}}

@@ -1,0 +1,13 @@
+div.poll {
+  .poll-buttons {
+    padding: 0 5px 5px 5px;
+
+    button {
+      margin: 4px 2px;
+    }
+  }
+
+  .poll-info {
+    .info-text:before {content:"\00a0";} // nbsp
+  }
+}

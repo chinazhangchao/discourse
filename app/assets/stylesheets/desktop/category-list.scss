@@ -1,0 +1,147 @@
+.category-list {
+  margin-bottom: 10px;
+  width: 100%;
+
+  td, th {
+    @extend .list-cell;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  th {
+    text-align: left;
+    vertical-align: middle;
+    font-weight: normal;
+  }
+
+  td:first-of-type {
+    padding-left: 10px;
+  }
+
+  &.with-topics .category {
+    width: 45%;
+  }
+
+  .topics .badge-notification,
+  .category .badge-notification {
+    background-color: transparent;
+    color: dark-light-choose($primary-medium, $secondary-high);
+  }
+
+  .topics {
+    width: 80px;
+    text-align: right;
+
+    .value {
+      font-size: 1.143em;
+    }
+    .unit {
+      font-size: .857em;
+    }
+    .badge-notification {
+      display: block;
+      text-align: right;
+      padding-right: 0;
+      margin-top: 5px;
+    }
+  }
+
+  .category-description,
+  .subcategories {
+    margin-top: 10px;
+  }
+
+  .subcategories {
+    .badge-notification.new-posts {
+      padding: 0;
+      margin: 0 5px 0 0;
+    }
+  }
+
+  .featured-topic {
+    margin: 10px 0 0;
+
+    &:first-of-type {
+      margin-top: 13px;
+    }
+
+    a.last-posted-at,
+    a.last-posted-at:visited {
+      font-size: 0.857em;
+      color: dark-light-choose($primary-medium, $secondary-high);
+    }
+
+    .topic-statuses .fa {
+      color: dark-light-choose($primary-medium, $secondary-high);
+    }
+
+    .topic-post-badges {
+      position: relative;
+      top: -2px;
+    }
+
+    .badge-notification.new-posts {
+      margin: 0 2px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $primary-low;
+      &:first-of-type {
+        border-top: 3px solid $primary-low;
+      }
+    }
+
+    .category {
+      border-left: 6px solid;
+      h3 {
+        font-size: 1.286em;
+        a[href] {
+          color: $primary;
+        }
+        .fa {
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .latest {
+      padding: 0 0 10px 10px;
+    }
+  }
+}
+
+.categories-and-latest {
+  display: flex;
+  flex-flow: row wrap;
+
+  div.column {
+    flex: 1;
+    flex-direction: row;
+    min-width: 300px;
+  }
+
+  div.column.categories {
+    @media all and (max-width : 600px) {
+      margin-right: 0;
+    }
+    @media all and (min-width : 600px) {
+      margin-right: 1em;
+    }
+    @media all and (min-width : 700px) {
+      margin-right: 2em;
+    }
+  }
+
+  .discourse-tag {
+    font-size: 0.786em;
+  }
+
+  .topic-featured-link {
+    padding-left: 8px;
+  }
+}
+
