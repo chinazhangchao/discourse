@@ -1,5 +1,6 @@
 require_dependency 'notification_levels'
 
+# 用户和帖子的关系
 class TopicUser < ActiveRecord::Base
   belongs_to :user
   belongs_to :topic

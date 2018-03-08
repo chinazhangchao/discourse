@@ -732,6 +732,7 @@ Discourse::Application.routes.draw do
     end
   end
 
+  # 增加多个约束[:latest, :unread, :new, :read, :posted, :bookmarks]
   Discourse.filters.each do |filter|
     root to: "list##{filter}", constraints: HomePageConstraint.new("#{filter}"), as: "list_#{filter}"
   end

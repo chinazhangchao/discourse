@@ -1,3 +1,4 @@
+# 通知级别，使用自定义Enum
 module NotificationLevels
   def self.all
     @all_levels ||= Enum.new(muted: 0,

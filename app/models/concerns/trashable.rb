@@ -51,7 +51,11 @@ module Trashable
       #
       # Fixed in Rails 4
       #
+      # update_all、update_column会收到默认scope的影响
       self.class.unscoped.where(id: self.id).update_all(deleted_at: deleted_at, deleted_by_id: deleted_by_id)
+      byebug
+      # raw_write_attribute方法在activerecord-5.1.4/lib/active_record/attribute_methods/dirty.rb中
+      # 新版本rails改为私有方法write_attribute_without_type_cast
       raw_write_attribute :deleted_at, deleted_at
       raw_write_attribute :deleted_by_id, deleted_by_id
     end

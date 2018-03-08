@@ -129,6 +129,7 @@ class Topic < ActiveRecord::Base
             }
 
   validates :featured_link, allow_nil: true, url: true
+  # validate 支持 :on, :if, :unless选项
   validate if: :featured_link do
     errors.add(:featured_link, :invalid_category) unless !featured_link_changed? ||
       Guardian.new.can_edit_featured_link?(category_id)
@@ -207,6 +208,7 @@ class Topic < ActiveRecord::Base
 
     # Query conditions
     condition = if ids.present?
+      # Logical NOT. Evaluates to 1 if the operand is 0, to 0 if the operand is nonzero, and NOT NULL returns NULL.
       ["NOT read_restricted OR id IN (:cats)", cats: ids]
     else
       ["NOT read_restricted"]
@@ -224,6 +226,7 @@ class Topic < ActiveRecord::Base
 
   after_create do
     unless skip_callbacks
+      # 修改帖子分类
       changed_to_category(category)
       advance_draft_sequence
     end
@@ -231,13 +234,16 @@ class Topic < ActiveRecord::Base
 
   before_save do
     unless skip_callbacks
+    # 没有分类id的设置未分类id，默认为-1
       ensure_topic_has_a_category
     end
     if title_changed?
+      # write_attribute更新对应字段
       write_attribute :fancy_title, Topic.fancy_title(title)
     end
 
     if category_id_changed? || new_record?
+      # 设置自动关闭时间，关闭讨论/解决问题
       inherit_auto_close_from_category
     end
   end
@@ -255,7 +261,9 @@ class Topic < ActiveRecord::Base
       self.tags_changed = false
     end
 
+    # 更新对应的search_data表
     SearchIndexer.index(self)
+    # 记录用户动作
     UserActionCreator.log_topic(self)
   end
 
@@ -264,6 +272,7 @@ class Topic < ActiveRecord::Base
     self.last_post_user_id ||= user_id
   end
 
+  # 设置自动关闭时间
   def inherit_auto_close_from_category
     if !self.closed &&
        !@ignore_category_auto_close &&
@@ -346,6 +355,7 @@ class Topic < ActiveRecord::Base
     apply_per_day_rate_limit_for("pms", :max_private_messages_per_day)
   end
 
+  # 生成fancy_title字段
   def self.fancy_title(title)
     escaped = ERB::Util.html_escape(title)
     return unless escaped
@@ -667,7 +677,9 @@ SQL
     builder.exec
   end
 
+  # 修改帖子分类
   def changed_to_category(new_category)
+  # 如果new_category为空或者此帖是category的创建帖返回
     return true if new_category.blank? || Category.find_by(topic_id: id).present?
     return false if new_category.id == SiteSetting.uncategorized_category_id && !SiteSetting.allow_uncategorized_topics
 
@@ -676,6 +688,7 @@ SQL
 
       if self.category_id != new_category.id
         self.update!(category_id: new_category.id)
+        # 旧分类帖子数减1
         Category.where(id: old_category.id).update_all("topic_count = topic_count - 1") if old_category
 
         # when a topic changes category we may have to start watching it
@@ -684,6 +697,7 @@ SQL
         CategoryUser.auto_track(category_id: new_category.id, topic_id: self.id)
       end
 
+      # 新分类帖子数加1
       Category.where(id: new_category.id).update_all("topic_count = topic_count + 1")
       CategoryFeaturedTopic.feature_topics_for(old_category) unless @import_mode
       CategoryFeaturedTopic.feature_topics_for(new_category) unless @import_mode || old_category.try(:id) == new_category.id

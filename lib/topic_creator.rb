@@ -136,6 +136,7 @@ class TopicCreator
 
   def find_category
     # PM can't have a category
+    # 私信没有类别
     @opts.delete(:category) if @opts[:archetype].present? && @opts[:archetype] == Archetype.private_message
 
     # Temporary fix to allow older clients to create topics.

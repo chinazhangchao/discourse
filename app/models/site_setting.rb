@@ -1,6 +1,7 @@
 require 'site_setting_extension'
 require_dependency 'site_settings/yaml_loader'
 
+# 网站设置
 class SiteSetting < ActiveRecord::Base
   extend SiteSettingExtension
 

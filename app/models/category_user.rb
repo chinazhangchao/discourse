@@ -1,5 +1,6 @@
 require_dependency 'notification_levels'
 
+# 类别与用户的关系
 class CategoryUser < ActiveRecord::Base
   belongs_to :category
   belongs_to :user
